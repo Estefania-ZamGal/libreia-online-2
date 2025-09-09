@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Realizar Pedido</title>
+  <link rel="stylesheet" href="../css/estilos.css">
+  <script src="../js/pedido.js" defer></script>
+  <link rel="icon" type="image/jpg" href="../images/favicon.jpg">
+</head>
+<body>
+<header>
+  <div class="logo">📚 Librería Online</div>
+  <nav>
+    <a href="../index.html">Inicio</a>
+    <a href="productos.html">Catálogo</a>
+    <a href="presupuesto.html" class="active">Pedido</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</header>
+
+<main>
+  <form id="formPedido">
+    <fieldset>
+      <legend>Datos del cliente</legend>
+      <label>Nombre: <input type="text" id="nombre" maxlength="15" required></label><br>
+      <label>Apellidos: <input type="text" id="apellidos" maxlength="40" required></label><br>
+      <label>Email: <input type="email" id="email" required></label><br>
+      <label>Teléfono: <input type="tel" id="telefono" pattern="[0-9]{9,11}" maxlength="11" required></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Producto</legend>
+      <label for="producto">Selecciona un libro:</label>
+      <select id="producto" required>
+        <option value="" disabled selected>-- Selecciona un libro --</option>
+        <option value="12">Amanecer en la cosecha - 12€</option>
+        <option value="15">Balada de pájaros cantores y serpientes - 15€</option>
+        <option value="18">Alas de Sangre - 18€</option>
+        <option value="20">Alas de Hierro - 20€</option>
+        <option value="14">Alas de Onix - 14€</option>
+        <option value="16">Circe - 16€</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Extras</legend>
+      <label><input type="checkbox" class="extra" value="5"> Envío exprés (+5€)</label><br>
+      <label><input type="checkbox" class="extra" value="3"> Envolver para regalo (+3€)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Plazo de entrega</legend>
+      <label><input type="radio" name="plazo" value="0" checked> Estándar (gratis)</label><br>
+      <label><input type="radio" name="plazo" value="10"> Urgente (+10€)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Resumen del pedido</legend>
+      <p>Total: <strong><span id="total">0€</span></strong></p>
+    </fieldset>
+
+    <label><input type="checkbox" id="condiciones"> Acepto las condiciones de privacidad</label><br>
+    <button type="submit" disabled>Realizar pedido</button>
+    <button type="reset">Resetear</button>
+  </form>
+</main>
+
+<footer>
+  <p>Síguenos:
+    <a href="#"><img src="../images/icono-facebook.png" alt="Facebook" width="24" height="24"></a>
+    <a href="#"><img src="../images/icono-instagram.png" alt="Instagram" width="24" height="24"></a>
+    <a href="#"><img src="../images/icono-twitter.png" alt="Twitter" width="24" height="24"></a>
+  </p>
+  <p>© 2025 Librería Online — Calle de los Lectores 123 — <a href="#">Aviso legal</a></p>
+</footer>
+</body>
+</html>
+

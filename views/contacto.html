@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="icon" type="image/jpg" href="../images/favicon.jpg">
+
+    <!-- Ruta -->
+   
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        #mapa {
+            height: 400px;
+            margin: 20px 0;
+            border: 2px solid #ccc;
+        }
+        .contacto-info, .formulario-contacto {
+            margin-bottom: 30px;
+        }
+        .formulario-contacto label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .formulario-contacto input, .formulario-contacto textarea {
+            width: 100%;
+            max-width: 500px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">📚 Librería Online</div>
+    <nav>
+        <a href="../index.html">Inicio</a>
+        <a href="productos.html">Catálogo</a>
+        <a href="presupuesto.html">Pedido</a>
+        <a href="contacto.html" class="active">Contacto</a>
+    </nav>
+</header>
+
+<main>
+    <section class="contacto-info">
+        <h2>¿Dónde estamos?</h2>
+        <p><strong>Dirección:</strong> Calle de los Lectores, 123, 28001, Madrid</p>
+        <p><strong>Teléfono:</strong> +34 900 123 456</p>
+        <p><strong>Email:</strong> contacto@infinitybooks.com</p>
+        <p><strong>Horario:</strong> Lunes a Viernes de 9:00 a 18:00</p>
+    </section>
+
+    <div id="mapa"></div>
+
+    <section class="formulario-contacto">
+        <h2>Envíanos un mensaje</h2>
+        <form id="formContacto">
+            <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" maxlength="30" required>
+            <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+            <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" rows="5" minlength="10" required></textarea>
+
+            <button type="submit" disabled>Enviar</button>
+        </form>
+    </section>
+</main>
+
+<script>
+    const ubicacionTienda = [40.4168, -3.7038]; // Madrid
+
+    const mapa = L.map('mapa').setView(ubicacionTienda, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(mapa);
+
+    L.marker(ubicacionTienda).addTo(mapa)
+        .bindPopup('Nuestra Librería')
+        .openPopup();
+
+    if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const coordsUsuario = [pos.coords.latitude, pos.coords.longitude];
+
+    // marcador del usuario
+    L.marker(coordsUsuario).addTo(mapa)
+      .bindPopup('Tu ubicación').openPopup();
+
+    // Ruta real usando OSRM
+    L.Routing.control({
+      waypoints: [
+        L.latLng(coordsUsuario),
+        L.latLng(ubicacionTienda)
+      ],
+      language: 'es',
+      lineOptions: {
+        styles: [{color: 'blue', opacity: 0.7, weight: 5}]
+      },
+      createMarker: function(i, wp, nWps) {
+        if (i === 0) {
+          return L.marker(wp.latLng).bindPopup("Tú");
+        } else if (i === nWps - 1) {
+          return L.marker(wp.latLng).bindPopup("Librería");
+        } else {
+          return null;
+        }
+      }
+    }).addTo(mapa);
+    }, err => {
+    alert("No se pudo obtener tu ubicación. Activa los permisos de geolocalización.");
+     });
+    }
+
+
+    // Validación del formulario
+    const form = document.getElementById("formContacto");
+    const nombre = document.getElementById("nombre");
+    const email = document.getElementById("email");
+    const mensaje = document.getElementById("mensaje");
+    const submitBtn = form.querySelector("button");
+
+    function validarFormulario() {
+        const nombreValido = /^[A-Za-zÁÉÍÓÚáéíóúñÑ ]{1,30}$/.test(nombre.value);
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+        const mensajeValido = mensaje.value.trim().length >= 10;
+        submitBtn.disabled = !(nombreValido && emailValido && mensajeValido);
+    }
+
+    form.addEventListener("input", validarFormulario);
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("¡Mensaje enviado correctamente!");
+        form.reset();
+        submitBtn.disabled = true;
+    });
+</script>
+
+<footer>
+    <p>Síguenos:
+        <a href="#"><img src="../images/icono-facebook.png" alt="Facebook" width="24" height="24"></a>
+        <a href="#"><img src="../images/icono-instagram.png" alt="Instagram" width="24" height="24"></a>
+        <a href="#"><img src="../images/icono-twitter.png" alt="Twitter" width="24" height="24"></a>
+    </p>
+    <p>© 2025 Librería Online — Calle de los Lectores 123 — <a href="#">Aviso legal</a></p>
+</footer>
+
+</body>
+</html>
+
